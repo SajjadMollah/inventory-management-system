@@ -31,18 +31,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.node.ModifierNodeElement
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.startActivity
-import com.example.inventorymanagementsystem.activity.AddActivity
-import com.example.inventorymanagementsystem.activity.MainActivity
 import com.example.inventorymanagementsystem.model.Inventory
 import com.example.inventorymanagementsystem.model.Item
 import com.example.inventorymanagementsystem.ui.theme.InventoryManagementSystemTheme
 import com.example.inventorymanagementsystem.viewmodel.InventoryViewModel
-
 
 
 @Composable
@@ -79,13 +74,7 @@ fun InventoryView(inventoryViewModel: InventoryViewModel, modifier: Modifier = M
 
             }
         }
-//        AddingProduct(onAddProduct = {inventoryViewModel.addItem(it)})
-        val context = LocalContext.current
-        Button(onClick = {val intent = Intent(context, AddActivity::class.java)
-        context.startActivity(intent)}){
-            Text(text = "Add Item")
-
-        }
+        AddingProduct(onAddProduct = {inventoryViewModel.addItem(it)})
 
 
     }
@@ -134,13 +123,6 @@ Column {
 
 
     }
-    val context = LocalContext.current
-    Button(onClick = {val intent = Intent(context, MainActivity::class.java)
-        context.startActivity(intent)}){
-        Text(text = "Return main page")
-
-    }
-
 }
 
 
@@ -153,11 +135,9 @@ fun InventoryViewPreview() {
         Surface(modifier = Modifier.fillMaxSize()) {
             val inventoryViewModel : InventoryViewModel = InventoryViewModel()
             InventoryView(inventoryViewModel)
-//            AddingProduct (onAddProduct = {inventoryViewModel.addItem(it)})
-
-            }
 
 
         }
 
     }
+}
