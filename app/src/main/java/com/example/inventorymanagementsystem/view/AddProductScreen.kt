@@ -56,17 +56,14 @@ fun AddProductScreen(
                 .padding(16.dp)
         )
         Button(
-            onClick = { onAddProduct.invoke(Item(product, price.toDouble(), quantity.toInt())) },
+            onClick = { onAddProduct.invoke(Item(product, price.toDouble(), quantity.toInt())); navController.popBackStack()  },
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
             Text(text = "Add Item")
 
 
         }
-        Button(onClick = { navController.popBackStack()}) {
-            Text("Go back to home")
 
-        }
 
     }
 
