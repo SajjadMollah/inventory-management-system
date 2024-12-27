@@ -1,6 +1,7 @@
 package com.example.inventorymanagementsystem.view
 
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,11 +10,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -30,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -47,7 +51,7 @@ import com.example.inventorymanagementsystem.viewmodel.InventoryViewModel
 fun InventoryViewScreen(
     inventoryViewModel: InventoryViewModel,
     navController: NavHostController,
-    modifier: Modifier = Modifier.fillMaxSize()
+    modifier: Modifier = Modifier.fillMaxSize().background(Color.DarkGray)
 ) {
     val inventory by inventoryViewModel.inventory.collectAsState()
 
@@ -59,7 +63,7 @@ fun InventoryViewScreen(
         Column(modifier = modifier.padding(innerPadding)) {
 
             if (inventory.isEmpty()) {
-                Text(text = "No items", modifier = Modifier.align(Alignment.CenterHorizontally))
+                Text(text = "No items", modifier = Modifier.align(Alignment.CenterHorizontally), color = Color.White)
             } else {
                 inventory.forEach { item ->
                     Card(
@@ -74,18 +78,22 @@ fun InventoryViewScreen(
                                 .padding(16.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-//                            AsyncImage(
-//                                model = ImageRequest.Builder(LocalContext.current)
-//                                    .data("https://www.veggycation.com/wp-content/uploads/2022/02/Orange-Fruit-1.jpg")
-//                                    .crossfade(true) // Optional: Add a nice fade-in effect
-//                                    .build(),
-//                                contentDescription = "Product Image",
-//                                modifier = Modifier
-//                                    .size(80.dp)
-//                                    .clip(RoundedCornerShape(8.dp)), // Optional: Add rounded corners
-//                                contentScale = ContentScale.Crop
-//                            )
-//                            Spacer(modifier = Modifier.width(16.dp))
+                            var imageUrl: String = "https://static.toiimg.com/thumb/53110049.cms?width=1200&height=900"
+                            if(item.imageUrl != ""){
+                                imageUrl = item.imageUrl
+                            }
+                            AsyncImage(
+                                model = ImageRequest.Builder(LocalContext.current)
+                                    .data(imageUrl)
+                                    .crossfade(true)
+                                    .build(),
+                                contentDescription = "Product Image",
+                                modifier = Modifier
+                                    .size(80.dp)
+                                    .clip(RoundedCornerShape(8.dp)),
+                                contentScale = ContentScale.Crop
+                            )
+                            Spacer(modifier = Modifier.width(16.dp))
                             Column {
                                 Text(text = item.name, fontWeight = FontWeight.Bold)
                                 Text(text = item.price.toString())
@@ -97,7 +105,8 @@ fun InventoryViewScreen(
                             ) {
 
                                 Spacer(modifier = Modifier.width(8.dp))
-                                Button(onClick = { inventoryViewModel.removeItem(item) }) {
+                                Button(onClick = { inventoryViewModel.removeItem(item) },
+                                    colors= ButtonDefaults.buttonColors(containerColor = Color.Gray)) {
                                     Icon(
                                         imageVector = Icons.Filled.Remove,
                                         contentDescription = "Remove Product Button"
@@ -129,7 +138,10 @@ fun InventoryViewScreen(
                 }
             }
 
-            Button(onClick = { navController.navigate("addProduct") }, modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            Button(onClick = { navController.navigate("addProduct") },
+                modifier = Modifier.align(Alignment.CenterHorizontally).clip(RectangleShape),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+            ) {
                 Text("Add a product")
                 Icon(imageVector = Icons.Filled.Add, contentDescription = "AddButton")
             }
@@ -149,7 +161,7 @@ fun ScreenTopBar(pageName: String,navController: NavHostController, modifier: Mo
                 },
 
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Blue, // Change background color here
+            containerColor = Color.Gray, // Change background color here
             titleContentColor = Color.White, // Change title text color here
             navigationIconContentColor = Color.White
         )

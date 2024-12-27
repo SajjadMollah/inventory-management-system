@@ -1,5 +1,6 @@
 package com.example.inventorymanagementsystem.view
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -32,7 +34,7 @@ import com.example.inventorymanagementsystem.model.Item
 fun AddProductScreen(
     onAddProduct: (Item) -> Unit,
     navController: NavHostController,
-    modifier: Modifier = Modifier.fillMaxSize()
+    modifier: Modifier = Modifier.fillMaxSize().background(color = Color.DarkGray)
 ) {
 
     var product by remember { mutableStateOf("") }
@@ -86,14 +88,13 @@ fun AddProductScreen(
                             price.toDouble(),
                             quantity.toInt(),
                             imageUrl
-
                         )
                     ); navController.popBackStack()
                 },
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
             ) {
                 Text(text = "Add Item")
-
 
             }
 
@@ -116,7 +117,7 @@ fun AddProductTopBar(pageName: String, navController: NavHostController, modifie
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Blue, // Change background color here
+            containerColor = Color.Gray, // Change background color here
             titleContentColor = Color.White, // Change title text color here
             navigationIconContentColor = Color.White
         )
