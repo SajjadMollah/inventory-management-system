@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -62,6 +63,9 @@ fun InventoryViewScreen(
                             text = "Quantity: ${item?.quantity ?: 0}",
                             modifier = Modifier.padding(0.dp, 0.dp, 10.dp, 0.dp)
                         )
+                        Button(onClick = {inventoryViewModel.removeItem(item)}){
+                            Icon(imageVector = Icons.Filled.Remove, contentDescription = "RemoveProductButton")
+                        }
                     }
                 }
             }
@@ -101,10 +105,7 @@ fun ScreenTopBar(pageName: String,navController: NavHostController, modifier: Mo
 fun InventoryViewScreenPreview() {
     InventoryManagementSystemTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-
             AppNav()
-
-
         }
 
     }

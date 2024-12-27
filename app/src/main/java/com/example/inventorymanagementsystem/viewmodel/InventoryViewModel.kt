@@ -17,5 +17,8 @@ class InventoryViewModel: ViewModel() {
     fun addItem(item: Item){
         _inventory.update { list -> list + item }
     }
+    fun removeItem(item: Item){
+        _inventory.update{ list -> list - item}
+    }
 
 }

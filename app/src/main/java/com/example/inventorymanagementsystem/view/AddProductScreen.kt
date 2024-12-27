@@ -40,7 +40,7 @@ fun AddProductScreen(
     var quantity by remember { mutableStateOf("") }
     Scaffold(
         topBar = {
-            AddProductTopBar("Inventory", navController)
+            AddProductTopBar("Add a Product", navController)
         }
     ) { innerPadding ->
 
