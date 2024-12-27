@@ -38,6 +38,7 @@ fun AddProductScreen(
     var product by remember { mutableStateOf("") }
     var price by remember { mutableStateOf("") }
     var quantity by remember { mutableStateOf("") }
+    var imageUrl by remember { mutableStateOf("") }
     Scaffold(
         topBar = {
             AddProductTopBar("Add a Product", navController)
@@ -69,13 +70,23 @@ fun AddProductScreen(
                     .fillMaxWidth()
                     .padding(16.dp)
             )
+            TextField(
+                value = imageUrl,
+                onValueChange = { imageUrl = it },
+                label = { Text("Enter a Image url") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            )
             Button(
                 onClick = {
                     onAddProduct.invoke(
                         Item(
                             product,
                             price.toDouble(),
-                            quantity.toInt()
+                            quantity.toInt(),
+                            imageUrl
+
                         )
                     ); navController.popBackStack()
                 },

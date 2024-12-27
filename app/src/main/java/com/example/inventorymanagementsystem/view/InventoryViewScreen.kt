@@ -3,12 +3,19 @@ package com.example.inventorymanagementsystem.view
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -21,10 +28,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.inventorymanagementsystem.navigation.AppNav
 import com.example.inventorymanagementsystem.ui.theme.InventoryManagementSystemTheme
 import com.example.inventorymanagementsystem.viewmodel.InventoryViewModel
@@ -49,24 +62,70 @@ fun InventoryViewScreen(
                 Text(text = "No items", modifier = Modifier.align(Alignment.CenterHorizontally))
             } else {
                 inventory.forEach { item ->
-                    Row {
-                        Text(
-                            text = "Product: ${item?.name ?: "No item found"}",
-                            modifier = Modifier.padding(0.dp, 0.dp, 10.dp, 0.dp)
-                        )
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+//                            AsyncImage(
+//                                model = ImageRequest.Builder(LocalContext.current)
+//                                    .data("https://www.veggycation.com/wp-content/uploads/2022/02/Orange-Fruit-1.jpg")
+//                                    .crossfade(true) // Optional: Add a nice fade-in effect
+//                                    .build(),
+//                                contentDescription = "Product Image",
+//                                modifier = Modifier
+//                                    .size(80.dp)
+//                                    .clip(RoundedCornerShape(8.dp)), // Optional: Add rounded corners
+//                                contentScale = ContentScale.Crop
+//                            )
+//                            Spacer(modifier = Modifier.width(16.dp))
+                            Column {
+                                Text(text = item.name, fontWeight = FontWeight.Bold)
+                                Text(text = item.price.toString())
+                                Text(text = "Quantity: ${item.quantity}")
 
-                        Text(
-                            text = "Price: ${item?.price ?: 0.0}",
-                            modifier = Modifier.padding(0.dp, 0.dp, 10.dp, 0.dp)
-                        )
-                        Text(
-                            text = "Quantity: ${item?.quantity ?: 0}",
-                            modifier = Modifier.padding(0.dp, 0.dp, 10.dp, 0.dp)
-                        )
-                        Button(onClick = {inventoryViewModel.removeItem(item)}){
-                            Icon(imageVector = Icons.Filled.Remove, contentDescription = "RemoveProductButton")
+                            }
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Button(onClick = { inventoryViewModel.removeItem(item) }) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Remove,
+                                        contentDescription = "Remove Product Button"
+                                    )
+                                }
+                            }
+
                         }
                     }
+
+//                    Row {
+//                        Text(
+//                            text = "Product: ${item?.name ?: "No item found"}",
+//                            modifier = Modifier.padding(0.dp, 0.dp, 10.dp, 0.dp)
+//                        )
+//
+//                        Text(
+//                            text = "Price: ${item?.price ?: 0.0}",
+//                            modifier = Modifier.padding(0.dp, 0.dp, 10.dp, 0.dp)
+//                        )
+//                        Text(
+//                            text = "Quantity: ${item?.quantity ?: 0}",
+//                            modifier = Modifier.padding(0.dp, 0.dp, 10.dp, 0.dp)
+//                        )
+//                        Button(onClick = {inventoryViewModel.removeItem(item)}){
+//                            Icon(imageVector = Icons.Filled.Remove, contentDescription = "RemoveProductButton")
+//                        }
+//                    }
                 }
             }
 
