@@ -29,16 +29,19 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -54,6 +57,7 @@ fun InventoryViewScreen(
     modifier: Modifier = Modifier.fillMaxSize().background(Color.DarkGray)
 ) {
     val inventory by inventoryViewModel.inventory.collectAsState()
+    val configuration  = LocalConfiguration.current
 
     Scaffold(
         topBar = {
@@ -63,7 +67,7 @@ fun InventoryViewScreen(
         Column(modifier = modifier.padding(innerPadding)) {
 
             if (inventory.isEmpty()) {
-                Text(text = "No items", modifier = Modifier.align(Alignment.CenterHorizontally), color = Color.White)
+                Text(text = "No items", modifier = Modifier.align(Alignment.CenterHorizontally).padding(0.dp, configuration.screenHeightDp.dp/3, 0.dp, 0.dp), color = Color.White,  fontSize = 23.sp)
             } else {
                 inventory.forEach { item ->
                     Card(
@@ -96,7 +100,7 @@ fun InventoryViewScreen(
                             Spacer(modifier = Modifier.width(16.dp))
                             Column {
                                 Text(text = item.name, fontWeight = FontWeight.Bold)
-                                Text(text = item.price.toString())
+                                Text(text = "$${item.price}")
                                 Text(text = "Quantity: ${item.quantity}")
 
                             }
@@ -137,9 +141,10 @@ fun InventoryViewScreen(
 //                    }
                 }
             }
+            Spacer(modifier = Modifier.weight(1f))
 
             Button(onClick = { navController.navigate("addProduct") },
-                modifier = Modifier.align(Alignment.CenterHorizontally).clip(RectangleShape),
+                modifier = Modifier.align(Alignment.CenterHorizontally).padding(16.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
             ) {
                 Text("Add a product")
