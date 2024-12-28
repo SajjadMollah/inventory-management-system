@@ -29,17 +29,21 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -59,6 +63,7 @@ fun InventoryViewScreen(
     val inventory by inventoryViewModel.inventory.collectAsState()
     val configuration  = LocalConfiguration.current
 
+
     Scaffold(
         topBar = {
             ScreenTopBar("Inventory", navController)
@@ -67,7 +72,7 @@ fun InventoryViewScreen(
         Column(modifier = modifier.padding(innerPadding)) {
 
             if (inventory.isEmpty()) {
-                Text(text = "No items", modifier = Modifier.align(Alignment.CenterHorizontally).padding(0.dp, configuration.screenHeightDp.dp/3, 0.dp, 0.dp), color = Color.White,  fontSize = 23.sp)
+                Text(text = "Empty", modifier = Modifier.align(Alignment.CenterHorizontally).padding(0.dp, configuration.screenHeightDp.dp/3, 0.dp, 0.dp), color = Color.Gray,  fontSize = 23.sp)
             } else {
                 inventory.forEach { item ->
                     Card(
@@ -108,9 +113,9 @@ fun InventoryViewScreen(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
 
-                                Spacer(modifier = Modifier.width(8.dp))
+                                Spacer(modifier = Modifier.weight(1f))
                                 Button(onClick = { inventoryViewModel.removeItem(item) },
-                                    colors= ButtonDefaults.buttonColors(containerColor = Color.Gray)) {
+                                    colors= ButtonDefaults.buttonColors(containerColor = Color.Gray)){
                                     Icon(
                                         imageVector = Icons.Filled.Remove,
                                         contentDescription = "Remove Product Button"
@@ -166,8 +171,8 @@ fun ScreenTopBar(pageName: String,navController: NavHostController, modifier: Mo
                 },
 
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Gray, // Change background color here
-            titleContentColor = Color.White, // Change title text color here
+            containerColor = Color.Gray,
+            titleContentColor = Color.White,
             navigationIconContentColor = Color.White
         )
 
@@ -180,7 +185,7 @@ fun ScreenTopBar(pageName: String,navController: NavHostController, modifier: Mo
 @Composable
 fun InventoryViewScreenPreview() {
     InventoryManagementSystemTheme {
-        Surface(modifier = Modifier.fillMaxSize()) {
+        Surface(modifier = Modifier.fillMaxSize()) {q
             AppNav()
         }
 

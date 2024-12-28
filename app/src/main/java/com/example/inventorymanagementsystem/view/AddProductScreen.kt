@@ -1,5 +1,6 @@
 package com.example.inventorymanagementsystem.view
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,6 +29,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.inventorymanagementsystem.model.Item
+import androidx.compose.ui.platform.LocalContext
+
 
 
 @Composable
@@ -36,6 +39,7 @@ fun AddProductScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier.fillMaxSize().background(color = Color.DarkGray)
 ) {
+    val context = LocalContext.current
 
     var product by remember { mutableStateOf("") }
     var price by remember { mutableStateOf("") }
@@ -81,7 +85,10 @@ fun AddProductScreen(
                     .padding(16.dp)
             )
             Button(
-                onClick = {
+                onClick = {if(validation(price, quantity) == false){
+                    Toast.makeText(context,"Invalid input", Toast.LENGTH_SHORT).show()
+                }
+                    else{
                     onAddProduct.invoke(
                         Item(
                             product,
@@ -89,7 +96,7 @@ fun AddProductScreen(
                             quantity.toInt(),
                             imageUrl
                         )
-                    ); navController.popBackStack()
+                    ); navController.popBackStack()}
                 },
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
@@ -101,6 +108,16 @@ fun AddProductScreen(
 
         }
     }
+
+}
+
+fun validation(price: String, quantity: String): Boolean{
+    val price = price.toDoubleOrNull()
+    val quantity = quantity.toIntOrNull()
+    if(price == null || quantity == null){
+        return false
+    }
+    return true
 
 }
 
