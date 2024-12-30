@@ -185,7 +185,7 @@ fun ScreenTopBar(pageName: String,navController: NavHostController, modifier: Mo
 @Composable
 fun InventoryViewScreenPreview() {
     InventoryManagementSystemTheme {
-        Surface(modifier = Modifier.fillMaxSize()) {q
+        Surface(modifier = Modifier.fillMaxSize()) {
             AppNav()
         }
 
