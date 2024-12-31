@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
@@ -58,17 +60,16 @@ fun InventoryViewScreen(
 ) {
     val inventory by inventoryViewModel.inventory.collectAsState()
     val configuration  = LocalConfiguration.current
-
-    LaunchedEffect(key1 = true) {
-        inventoryViewModel.addOnlineItems()
-    }
-
+    val scrollState = rememberScrollState()
+//    LaunchedEffect(key1 = true) {
+//        inventoryViewModel.addOnlineItems()
+//    } --put it in nav controller so when popping back to main screen it does not recall the data
     Scaffold(
         topBar = {
             ScreenTopBar("Inventory", navController)
         }
     ) { innerPadding ->
-        Column(modifier = modifier.padding(innerPadding)) {
+        Column(modifier = modifier.padding(innerPadding).verticalScroll(scrollState)) {
 
             if (inventory.isEmpty()) {
                 Text(text = "Empty", modifier = Modifier

@@ -19,12 +19,12 @@ class InventoryViewModel: ViewModel() {
 
     private val _inventory = MutableStateFlow<List<Item>>(listOf())
 
-    val inventory: StateFlow<List<Item>> = _inventory.asStateFlow()
+    val inventory: StateFlow<List<Item>> = _inventory
 
 
-    init{
-        addOnlineItems()
-    }
+//    init{
+//        addOnlineItems()
+//    } --> Causes dupe data to show when app is started
 
     fun addItem(item: Item){
         _inventory.update { list -> list + item }
@@ -43,7 +43,7 @@ class InventoryViewModel: ViewModel() {
                         val itemsList = response.body()
                         if (itemsList != null) {
                             itemsList.forEach { item ->
-                                _inventory.update { list -> list + item }
+                                addItem(item)
                             }
                         }
                     } else {
