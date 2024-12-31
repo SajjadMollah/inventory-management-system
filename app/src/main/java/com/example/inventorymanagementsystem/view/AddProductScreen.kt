@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.Button
@@ -45,13 +47,14 @@ fun AddProductScreen(
     var price by remember { mutableStateOf("") }
     var quantity by remember { mutableStateOf("") }
     var imageUrl by remember { mutableStateOf("") }
+    val scrollState = rememberScrollState()
     Scaffold(
         topBar = {
             AddProductTopBar("Add a Product", navController)
         }
     ) { innerPadding ->
 
-        Column(modifier = modifier.padding(innerPadding)) {
+        Column(modifier = modifier.padding(innerPadding).verticalScroll(scrollState)) {
             TextField(
                 value = product,
                 onValueChange = { product = it },

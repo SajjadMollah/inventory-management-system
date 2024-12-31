@@ -10,8 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
@@ -27,23 +28,18 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -58,21 +54,27 @@ import com.example.inventorymanagementsystem.viewmodel.InventoryViewModel
 fun InventoryViewScreen(
     inventoryViewModel: InventoryViewModel,
     navController: NavHostController,
-    modifier: Modifier = Modifier.fillMaxSize().background(Color.DarkGray)
+    modifier: Modifier = Modifier
+        .fillMaxSize()
+        .background(Color.DarkGray)
 ) {
     val inventory by inventoryViewModel.inventory.collectAsState()
     val configuration  = LocalConfiguration.current
-
-
+    val scrollState = rememberScrollState()
+//    LaunchedEffect(key1 = true) {
+//        inventoryViewModel.addOnlineItems()
+//    } --put it in nav controller so when popping back to main screen it does not recall the data
     Scaffold(
         topBar = {
             ScreenTopBar("Inventory", navController)
         }
     ) { innerPadding ->
-        Column(modifier = modifier.padding(innerPadding)) {
+        Column(modifier = modifier.padding(innerPadding).verticalScroll(scrollState)) {
 
             if (inventory.isEmpty()) {
-                Text(text = "Empty", modifier = Modifier.align(Alignment.CenterHorizontally).padding(0.dp, configuration.screenHeightDp.dp/3, 0.dp, 0.dp), color = Color.Gray,  fontSize = 23.sp)
+                Text(text = "Empty", modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(0.dp, configuration.screenHeightDp.dp / 3, 0.dp, 0.dp), color = Color.Gray,  fontSize = 23.sp)
             } else {
                 inventory.forEach { item ->
                     Card(
@@ -88,8 +90,8 @@ fun InventoryViewScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             var imageUrl: String = "https://static.toiimg.com/thumb/53110049.cms?width=1200&height=900"
-                            if(item.imageUrl != ""){
-                                imageUrl = item.imageUrl
+                            if(item.imageURL != ""){
+                                imageUrl = item.imageURL
                             }
                             AsyncImage(
                                 model = ImageRequest.Builder(LocalContext.current)
@@ -149,7 +151,9 @@ fun InventoryViewScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             Button(onClick = { navController.navigate("addProduct") },
-                modifier = Modifier.align(Alignment.CenterHorizontally).padding(16.dp),
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(16.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
             ) {
                 Text("Add a product")
