@@ -13,9 +13,7 @@ import com.example.inventorymanagementsystem.viewmodel.InventoryViewModel
 fun AppNav(){
     val navController = rememberNavController()
     val inventoryViewModel = InventoryViewModel()
-    LaunchedEffect(key1 = true) {
-        inventoryViewModel.addOnlineItems()
-    }
+
     NavHost(navController=navController, startDestination = "home"){
         composable("home"){
             InventoryViewScreen(inventoryViewModel, navController)}

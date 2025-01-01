@@ -22,9 +22,9 @@ class InventoryViewModel: ViewModel() {
     val inventory: StateFlow<List<Item>> = _inventory
 
 
-//    init{
-//        addOnlineItems()
-//    } --> Causes dupe data to show when app is started
+    init{
+        addOnlineItems()
+    }
 
     fun addItem(item: Item){
         _inventory.update { list -> list + item }

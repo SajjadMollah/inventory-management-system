@@ -57,13 +57,15 @@ fun InventoryViewScreen(
     modifier: Modifier = Modifier
         .fillMaxSize()
         .background(Color.DarkGray)
-) {
+)
+{
+//    LaunchedEffect(Unit) {
+//    inventoryViewModel.addOnlineItems()
+//}
     val inventory by inventoryViewModel.inventory.collectAsState()
     val configuration  = LocalConfiguration.current
     val scrollState = rememberScrollState()
-//    LaunchedEffect(key1 = true) {
-//        inventoryViewModel.addOnlineItems()
-//    } --put it in nav controller so when popping back to main screen it does not recall the data
+
     Scaffold(
         topBar = {
             ScreenTopBar("Inventory", navController)
