@@ -71,6 +71,7 @@ fun InventoryViewScreen(
             ScreenTopBar("Inventory", navController)
         }
     ) { innerPadding ->
+
         Column(modifier = modifier.padding(innerPadding).verticalScroll(scrollState)) {
 
             if (inventory.isEmpty()) {

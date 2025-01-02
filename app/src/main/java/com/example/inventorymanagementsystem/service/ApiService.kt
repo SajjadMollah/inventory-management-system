@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface ApiService {
-    @GET("27f169a7-a022-4894-a66a-9d779f588882")
+    @GET("f5086234-4e69-48f9-a736-f7dc1a3b3996")
     fun getItems(): Call<List<Item>>
 
 }

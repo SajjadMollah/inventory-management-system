@@ -3,67 +3,45 @@ package com.example.inventorymanagementsystem.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.inventorymanagementsystem.clients.ApiClient
 import com.example.inventorymanagementsystem.model.InventoryRepository
 import com.example.inventorymanagementsystem.model.Item
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-class InventoryViewModel: ViewModel() {
+data class InventoryUiState(
+    val isLoading: Boolean = false,
+    val items: List<Item> = emptyList(),
+    val error: String? = null
+)
 
-    private val _inventory = MutableStateFlow<List<Item>>(listOf())
+class InventoryViewModel(
+    private val repository: InventoryRepository = InventoryRepository()
+) : ViewModel() {
 
-    val inventory: StateFlow<List<Item>> = _inventory
+    val inventory: StateFlow<List<Item>> = repository.inventory
 
-
-    init{
-        addOnlineItems()
+    init {
+        loadItems()
     }
 
-    fun addItem(item: Item){
-        _inventory.update { list -> list + item }
-    }
-    fun removeItem(item: Item){
-        _inventory.update{ list -> list - item}
-    }
-
-    fun addOnlineItems(){
+    private fun loadItems() {
         viewModelScope.launch {
-            try{
-            val call = ApiClient.apiService.getItems()
-            call.enqueue(object : Callback<List<Item>> {
-                override fun onResponse(call: Call<List<Item>>, response: Response<List<Item>>) {
-                    if (response.isSuccessful) {
-                        val itemsList = response.body()
-                        if (itemsList != null) {
-                            itemsList.forEach { item ->
-                                addItem(item)
-                            }
-                        }
-                    } else {
-                        println("Response body is null")
+            try {
+                repository.fetchItems()
+                    .onFailure { e ->
+                        Log.e("InventoryViewModel", "Failed to fetch items", e)
                     }
-                }
-
-                override fun onFailure(call: Call<List<Item>>, t: Throwable) {
-                    println("Request failed")
-                    Log.e("InventoryViewModel", "Exception: ${t.message}", t)
-                }
-
-            })
-        }catch(e: Exception){
-                Log.e("InventoryViewModel", "Exception: ${e.message}", e)
-        }
+            } catch (e: Exception) {
+                Log.e("InventoryViewModel", "Exception while fetching items", e)
+            }
         }
     }
 
+    fun addItem(item: Item) {
+        repository.addItem(item)
+    }
 
-
-
+    fun removeItem(item: Item) {
+        repository.removeItem(item)
+    }
 }
